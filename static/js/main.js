@@ -132,9 +132,25 @@ exports.handleClientMessage_CUSTOM = (hook, context, cb) => {
       // Get the new string but maintain mark up
       const newText = html_substr(html, (x));
 
+      const innerDoc = $('iframe[name="ace_outer"]').contents()
+          .find('iframe').contents().find('#innerdocbody');
+
+      const getStyle = (style) => parseInt(innerDoc.css(style));
+
+      const css = {
+        padding: `0 ${getStyle('paddingRight')}px 0 ${getStyle('paddingLeft')}px`,
+        margin: `0 ${getStyle('marginRight')}px 0 ${getStyle('marginLeft')}px`,
+      };
       // A load of ugly HTML that can prolly be moved to CSS
-      const newLine = `<span style='width:${divWidth}px' id='${authorWorker}'` +
-        ` class='ghettoCursorXPos'>${newText}</span>`;
+      const newLine = `
+        <span 
+          style='width:${innerDoc.innerWidth()}px;padding:${css.padding}; margin: ${css.margin};'
+          id='${authorWorker}'
+          class='ghettoCursorXPos'
+        >
+         ${newText}
+        </span>
+      `;
 
       // Set the globalKey to 0, we use this when we wrap the objects in a datakey
       globalKey = 0; // It's bad, messy, don't ever develop like this.
@@ -151,7 +167,7 @@ exports.handleClientMessage_CUSTOM = (hook, context, cb) => {
       // console.log($(worker).html(), x);
 
       // Get the Left offset of the x span
-      const span = $(worker).find(`[data-key="${x - 1}"]`);
+      const span = $(worker).find(`[data-key]`).last();
 
       // Get the width of the element (This is how far out X is in px);
       let left;
@@ -176,11 +192,9 @@ exports.handleClientMessage_CUSTOM = (hook, context, cb) => {
       left += leftOffset;
 
       // Add support for page view margins
-      let divMargin = $(div).css('margin-left');
+      let divMargin = $(div).parent().css('margin-left');
       let innerdocbodyMargin = $(div).parent().css('padding-left');
-      if (innerdocbodyMargin) {
-        innerdocbodyMargin = parseInt(innerdocbodyMargin);
-      } else {
+      if (!innerdocbodyMargin) {
         innerdocbodyMargin = 0;
       }
       if (divMargin) {
@@ -192,7 +206,7 @@ exports.handleClientMessage_CUSTOM = (hook, context, cb) => {
           left += divMargin;
         }
       }
-      left += 18;
+      // left += 10;
 
       // Remove the element
       $('iframe[name="ace_outer"]').contents().find('#outerdocbody')
@@ -218,19 +232,24 @@ exports.handleClientMessage_CUSTOM = (hook, context, cb) => {
           const location = stickUp ? 'stickUp' : 'stickDown';
 
           // Create a new Div for this author
-          const $indicator = $(`<div class='caretindicator ${location} caret-${authorClass}'
-              style='height:16px;left:${left}px;top:${top}px;background-color:${color}'>
-              <p class='stickp ${location}'></p></div>`);
+          const $indicator = $(`
+            <div 
+              class='caretindicator ${location} caret-${authorClass}'
+              style='height:16px;left:${left}px;top:${top}px;background-color:${color}'
+            >
+              <p class='stickp ${location}'></p>
+            </div>
+          `);
           $indicator.attr('title', authorName);
           $indicator.find('p').text(authorName);
           $(outBody).append($indicator);
 
           // After a while, fade it out :)
-          setTimeout(() => {
-            $indicator.fadeOut(500, () => {
-              $indicator.remove();
-            });
-          }, 2000);
+          // setTimeout(() => {
+          //   $indicator.fadeOut(500, () => {
+          //     $indicator.remove();
+          //   });
+          // }, 2000);
         }
       });
     }

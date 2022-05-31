@@ -1,13 +1,13 @@
 .ghettoCursorXPos{
-  white-space:pre-wrap;
-  word-wrap:break-word;
+  white-space:inherit;
+  word-wrap:inherit;
   z-index:99999;
   background:red;
-  position:fixed;
+  position:absolute;
   top:80px;
-  left:33px;
-  margin-right:10px;
-  line-height:16px; /* Prolly breaks H1 etc */
+  left:0;
+  margin-right:inherit;
+  line-height:inherit; /* Prolly breaks H1 etc */
 }
 
 .caretindicator{
