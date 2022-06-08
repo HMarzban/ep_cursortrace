@@ -3,11 +3,18 @@
   word-wrap:inherit;
   z-index:99999;
   background:red;
-  position:absolute;
-  top:80px;
   left:0;
   margin-right:inherit;
   line-height:inherit; /* Prolly breaks H1 etc */
+}
+
+.ghettoCursorXPos h1,
+.ghettoCursorXPos h2,
+.ghettoCursorXPos h3,
+.ghettoCursorXPos h4,
+.ghettoCursorXPos h5,
+.ghettoCursorXPos h6 {
+  display: inline-block!important;
 }
 
 .caretindicator{
@@ -47,7 +54,6 @@ p.stickUp{
   padding-left:4px;
   padding-right:4px;
 }
-
 
 p.stickDown{
   position:relative;
