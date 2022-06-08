@@ -9,6 +9,21 @@
 const authorManager = require('ep_etherpad-lite/node/db/AuthorManager');
 const padMessageHandler = require('ep_etherpad-lite/node/handler/PadMessageHandler');
 
+const sendToRoom = (message, msg) => {
+  // Todo write some buffer handling for protection and to stop DDoS
+  // myAuthorId exists in message.
+  const bufferAllows = true;
+  if (bufferAllows) {
+    // We have to do this because the editor hasn't redrawn by the time the cursor has arrived
+    setTimeout(() => {
+      padMessageHandler.handleCustomObjectMessage(msg, false, () => {
+        // TODO: Error handling.
+      });
+    }
+    , 500);
+  }
+};
+
 /*
 * Handle incoming messages from clients
 */
@@ -47,20 +62,4 @@ exports.handleMessage = async (hookName, context) => {
   }
 
   return null; // null prevents Etherpad from attempting to process the message any further.
-};
-
-
-const sendToRoom = (message, msg) => {
-  // Todo write some buffer handling for protection and to stop DDoS
-  // myAuthorId exists in message.
-  const bufferAllows = true;
-  if (bufferAllows) {
-    // We have to do this because the editor hasn't redrawn by the time the cursor has arrived
-    setTimeout(() => {
-      padMessageHandler.handleCustomObjectMessage(msg, false, () => {
-        // TODO: Error handling.
-      });
-    }
-    , 500);
-  }
 };
