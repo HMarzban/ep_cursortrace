@@ -62,13 +62,15 @@ const wrap = (target) => {
   return newtarget.html();
 };
 
-exports.aceInitInnerdocbodyHead = (hookName, args, cb) => {
+export const aceEditorCSS = (hookName, cb) => ['/ep_cursortrace/static/css/cursortrace.css'];
+
+export const aceInitInnerdocbodyHead = (hookName, args, cb) => {
   const url = '../static/plugins/ep_cursortrace/static/css/ace_inner.css';
   args.iframeHTML.push(`<link rel="stylesheet" type="text/css" href="${url}"/>`);
   cb();
 };
 
-exports.postAceInit = (hookName, args, cb) => {
+export const postAceInit = (hookName, args, cb) => {
   initiated = true;
 
   // create a limited doc pageview
@@ -103,7 +105,7 @@ exports.postAceInit = (hookName, args, cb) => {
   cb();
 };
 
-exports.getAuthorClassName = (author) => {
+export const getAuthorClassName = (author) => {
   if (!author) return false;
   const authorId = author.replace(/[^a-y0-9]/g, (c) => {
     if (c === '.') return '-';
@@ -112,7 +114,7 @@ exports.getAuthorClassName = (author) => {
   return `ep_real_time_chat-${authorId}`;
 };
 
-exports.className2Author = (className) => {
+export const className2Author = (className) => {
   if (className.substring(0, 7) === 'author-') {
     return className.substring(7).replace(/[a-y0-9]+|-|z.+?z/g, (cc) => {
       if (cc === '-') { return '.'; } else if (cc.charAt(0) === 'z') {
@@ -124,7 +126,7 @@ exports.className2Author = (className) => {
   }
 };
 
-exports.aceEditEvent = (hookName, args) => {
+export const aceEditEvent = (hookName, args) => {
   // Note: last is a tri-state: undefined (when the pad is first loaded)
   // null (no last cursor) and [line, col]
   // The AceEditEvent because it usually applies to selected items and isn't
@@ -157,7 +159,7 @@ exports.aceEditEvent = (hookName, args) => {
   return;
 };
 
-exports.handleClientMessage_CUSTOM = (hook, context, cb) => {
+export const handleClientMessage_CUSTOM = (hook, context, cb) => {
   /* I NEED A REFACTOR, please */
   // A huge problem with this is that it runs BEFORE the dom has
   // been updated so edit events are always late..
