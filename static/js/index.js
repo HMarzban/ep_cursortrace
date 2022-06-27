@@ -254,7 +254,7 @@ export const handleClientMessage_CUSTOM = (hook, context, cb) => {
 
       // Get the height of the element minus the inner line height
       const height = worker.height(); // the height of the worker
-      top = (top + height) - (lastSpanHasChar.height());
+      top = (top + height) - (lastSpanHasChar.height() + 13);
       // plus the top offset minus the actual height of our focus span
       if (top <= 0) { // If the tooltip wont be visible to the user because it's too high up
         stickUp = true;
@@ -266,7 +266,7 @@ export const handleClientMessage_CUSTOM = (hook, context, cb) => {
 
       // if the caret is in the heading line
       if (closectHeader.length) {
-        top -= parseInt(closectHeader.css('marginTop'));
+        top -= parseInt(closectHeader.css('marginTop')) - 13;
         left += parseInt($(worker).parent().css('paddingLeft')) * 2;
       }
 
@@ -308,11 +308,11 @@ export const handleClientMessage_CUSTOM = (hook, context, cb) => {
           $(outBody).append($indicator);
 
           // After a while, fade it out :)
-          setTimeout(() => {
-            $indicator.fadeOut(500, () => {
-              $indicator.remove();
-            });
-          }, 2000);
+          // setTimeout(() => {
+          //   $indicator.fadeOut(500, () => {
+          //     $indicator.remove();
+          //   });
+          // }, 2000);
         }
       });
     }
